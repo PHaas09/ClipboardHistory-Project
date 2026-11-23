@@ -1,0 +1,23 @@
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Compile and package
+        run: |
+          javac --release 17 -d out src/ClipboardHistoryApp.java
+          jar --create --file ClipboardHistory.jar --main-class ClipboardHistoryApp -C out .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClipboardHistory.jar
+          path: ClipboardHistory.jar
